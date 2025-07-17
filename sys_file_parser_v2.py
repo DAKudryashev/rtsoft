@@ -1,30 +1,6 @@
-from dataclasses import dataclass
 from xml.etree import ElementTree
 
-
-@dataclass
-class FB:
-    name: str
-    fb_type: str
-    resource: str = ''
-
-@dataclass
-class Parameter:
-    value: str
-    destination: str
-    fb: FB
-
-@dataclass
-class Connection:
-    source: str
-    destination: str
-    resource: str
-
-@dataclass
-class Resource:
-    short_name: str
-    full_name: str
-    res_type: str
+from data import FB, Parameter, Connection, Resource
 
 class SysFileParser:
     def __init__(self, path=''):
@@ -201,6 +177,9 @@ class SysFileParser:
         print(f'device name: {self.device_name}')
         print(f'resources: {self.resources}')
         print(f'mapped connections: {self.connections}')
+
+    def get_data(self):
+        return [self.application_name, self.fbs, self.parameters, self.device_name, self.resources, self.connections]
 
 
 if __name__ == '__main__':

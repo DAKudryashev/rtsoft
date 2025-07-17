@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<System Name="parserTest">
+	<VersionInfo Version="1.0" Author="dakudryashev" Date="2025-07-16">
+	</VersionInfo>
+	<Application Name="parserTestApp">
+		<SubAppNetwork>
+			<FB Name="STRING2STRING" Type="STRING2STRING" x="1500" y="600">
+				<Parameter Name="IN" Value="'hello'"/>
+			</FB>
+			<FB Name="OUT_ANY_CONSOLE" Type="OUT_ANY_CONSOLE" x="4400" y="600">
+				<Parameter Name="QI" Value="TRUE"/>
+				<Parameter Name="LABEL" Value="'world'"/>
+			</FB>
+			<EventConnections>
+				<Connection Source="STRING2STRING.CNF" Destination="OUT_ANY_CONSOLE.REQ"/>
+			</EventConnections>
+			<DataConnections>
+				<Connection Source="STRING2STRING.OUT" Destination="OUT_ANY_CONSOLE.IN" dx1="1017.65"/>
+			</DataConnections>
+		</SubAppNetwork>
+	</Application>
+	<Device Name="FORTE_PC" Type="FORTE_PC" x="2917.65" y="1541.18">
+		<Parameter Name="MGR_ID" Value="&quot;localhost:61499&quot;" Comment="Device manager socket ID"/>
+		<Attribute Name="Profile" Type="STRING" Value="HOLOBLOC"/>
+		<Attribute Name="Color" Type="STRING" Value="255,190,111"/>
+		<Resource Name="EMB_RES" Type="EMB_RES" x="0" y="0">
+			<FBNetwork>
+				<EventConnections>
+					<Connection Source="START.COLD" Destination="parserTestApp.STRING2STRING.REQ" dx1="364.71"/>
+				</EventConnections>
+			</FBNetwork>
+		</Resource>
+	</Device>
+	<Segment Name="Ethernet" Type="Ethernet" x="2682.35" y="2823.53" dx1="1764.71">
+		<Attribute Name="Color" Type="STRING" Value="209,57,159"/>
+	</Segment>
+	<Mapping From="parserTestApp.STRING2STRING" To="FORTE_PC.EMB_RES"/>
+	<Mapping From="parserTestApp.OUT_ANY_CONSOLE" To="FORTE_PC.EMB_RES"/>
+	<Link SegmentName="Ethernet" CommResource="FORTE_PC" Comment="">
+	</Link>
+</System>
