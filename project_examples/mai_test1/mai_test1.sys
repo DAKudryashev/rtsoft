@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<System Name="mai_test1">
+	<VersionInfo Version="1.0" Author="alex" Date="2025-07-02">
+	</VersionInfo>
+	<Application Name="mai_test1App">
+		<SubAppNetwork>
+			<FB Name="OUT_ANY_CONSOLE" Type="OUT_ANY_CONSOLE" x="3600" y="0">
+				<Parameter Name="QI" Value="TRUE"/>
+				<Parameter Name="LABEL" Value="'Hello'"/>
+			</FB>
+			<FB Name="STRING2STRING" Type="STRING2STRING" x="1200" y="0">
+				<Parameter Name="IN" Value="' world'"/>
+			</FB>
+			<FB Name="E_CYCLE" Type="E_CYCLE" x="0" y="0">
+				<Parameter Name="DT" Value="T#1s"/>
+			</FB>
+			<FB Name="DINT2DINT" Type="DINT2DINT" x="700" y="1000">
+			</FB>
+			<EventConnections>
+				<Connection Source="STRING2STRING.CNF" Destination="OUT_ANY_CONSOLE.REQ"/>
+				<Connection Source="E_CYCLE.EO" Destination="STRING2STRING.REQ"/>
+			</EventConnections>
+			<DataConnections>
+				<Connection Source="STRING2STRING.OUT" Destination="OUT_ANY_CONSOLE.IN" dx1="817.65"/>
+			</DataConnections>
+		</SubAppNetwork>
+	</Application>
+	<Device Name="FORTE_PC" Type="FORTE_PC" x="2482.35" y="876.47">
+		<Parameter Name="MGR_ID" Value="&quot;localhost:61499&quot;" Comment="Device manager socket ID"/>
+		<Attribute Name="Profile" Type="STRING" Value="HOLOBLOC"/>
+		<Attribute Name="Color" Type="STRING" Value="255,190,111"/>
+		<Resource Name="EMB_RES" Type="EMB_RES" x="0" y="0">
+			<FBNetwork>
+				<EventConnections>
+					<Connection Source="START.COLD" Destination="mai_test1App.E_CYCLE.START" dx1="70.59" dx2="70.59" dy="400"/>
+				</EventConnections>
+			</FBNetwork>
+		</Resource>
+		<Resource Name="EMB_RES_1" Type="EMB_RES" x="0" y="0">
+			<FBNetwork>
+			</FBNetwork>
+		</Resource>
+	</Device>
+	<Segment Name="Ethernet" Type="Ethernet" x="2564.71" y="1800" dx1="1764.71">
+		<Attribute Name="Color" Type="STRING" Value="230,203,129"/>
+	</Segment>
+	<Mapping From="mai_test1App.STRING2STRING" To="FORTE_PC.EMB_RES"/>
+	<Mapping From="mai_test1App.OUT_ANY_CONSOLE" To="FORTE_PC.EMB_RES"/>
+	<Mapping From="mai_test1App.E_CYCLE" To="FORTE_PC.EMB_RES"/>
+	<Mapping From="mai_test1App.DINT2DINT" To="FORTE_PC.EMB_RES_1"/>
+	<Link SegmentName="Ethernet" CommResource="FORTE_PC" Comment="">
+	</Link>
+</System>

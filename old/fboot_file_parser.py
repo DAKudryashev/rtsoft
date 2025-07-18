@@ -90,7 +90,7 @@ class FbootFilePparser:
 
 
 if __name__ == '__main__':
-    a = FbootFilePparser(r'D:\projects\rtsoft\parserTest_FORTE_PC.fboot')
+    a = FbootFilePparser(r'D:\projects\rtsoft\project_examples\testProject\testProject_FORTE_PC.fboot')
     a.parse_fboot_file()
 
     # b = FbootFilePparser(r'D:\projects\rtsoft\mai_test1_FORTE_PC.fboot')

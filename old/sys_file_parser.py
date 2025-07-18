@@ -109,5 +109,5 @@ class SysFileParser:
 
 
 if __name__ == '__main__':
-    test_parser = SysFileParser(r'D:\projects\rtsoft\testProject.sys')
+    test_parser = SysFileParser(r'D:\projects\rtsoft\project_examples\testProject\testProject.sys')
     test_parser.parse_sys_file()

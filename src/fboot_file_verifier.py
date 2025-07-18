@@ -1,4 +1,4 @@
-from data import FB, Parameter, Connection, Resource
+from src.data import FB, Parameter, Connection, Resource
 
 
 class FbootFileVerifier:

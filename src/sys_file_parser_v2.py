@@ -1,6 +1,6 @@
 from xml.etree import ElementTree
 
-from data import FB, Parameter, Connection, Resource
+from src.data import FB, Parameter, Connection, Resource
 
 class SysFileParser:
     def __init__(self, path=''):
@@ -183,5 +183,5 @@ class SysFileParser:
 
 
 if __name__ == '__main__':
-    a = SysFileParser(r'D:\projects\rtsoft\parserTest.sys')
+    a = SysFileParser(r'../project_examples/parserTest/parserTest.sys')
     a.parse_sys_file()
