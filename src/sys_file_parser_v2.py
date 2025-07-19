@@ -1,6 +1,6 @@
 from xml.etree import ElementTree
 
-from src.data import FB, Parameter, Connection, Resource
+from data import FB, Parameter, Connection, Resource
 
 class SysFileParser:
     def __init__(self, path=''):
