@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<System Name="parserUnmappedTest">
+	<VersionInfo Version="1.0" Author="dakudryashev" Date="2025-07-20">
+	</VersionInfo>
+	<Application Name="parserUnmappedTestApp">
+		<SubAppNetwork>
+			<FB Name="summator" Type="F_ADD" x="2400" y="2000">
+			</FB>
+			<FB Name="cmd_output_result1" Type="OUT_ANY_CONSOLE" x="3800" y="1900">
+				<Parameter Name="QI" Value="TRUE"/>
+				<Parameter Name="LABEL" Value="'result'"/>
+			</FB>
+			<FB Name="cmd_output_num1" Type="OUT_ANY_CONSOLE" x="1000" y="1200">
+				<Parameter Name="QI" Value="TRUE"/>
+				<Parameter Name="LABEL" Value="'num1'"/>
+			</FB>
+			<FB Name="cmd_output_num2" Type="OUT_ANY_CONSOLE" x="1000" y="2700">
+				<Parameter Name="QI" Value="TRUE"/>
+				<Parameter Name="LABEL" Value="'num2'"/>
+			</FB>
+			<FB Name="event_generator" Type="E_CYCLE" x="-2100" y="1900">
+				<Parameter Name="DT" Value="T#10s"/>
+			</FB>
+			<FB Name="real_randomizer" Type="FB_RANDOM" x="-1100" y="1900">
+				<Parameter Name="SEED" Value="2025"/>
+			</FB>
+			<FB Name="real_to_string" Type="F_REAL_AS_STRING" x="3700" y="3000">
+			</FB>
+			<FB Name="cmd_output_result2" Type="OUT_ANY_CONSOLE" x="5300" y="3000">
+				<Parameter Name="QI" Value="TRUE"/>
+				<Parameter Name="LABEL" Value="'result'"/>
+			</FB>
+			<EventConnections>
+				<Connection Source="event_generator.EO" Destination="real_randomizer.REQ" dx1="158.82"/>
+				<Connection Source="real_randomizer.CNF" Destination="cmd_output_num1.REQ" dx1="711.76"/>
+				<Connection Source="real_randomizer.CNF" Destination="cmd_output_num2.REQ" dx1="711.76"/>
+				<Connection Source="real_randomizer.CNF" Destination="summator.REQ"/>
+				<Connection Source="summator.CNF" Destination="real_to_string.REQ" dx1="452.94"/>
+				<Connection Source="real_to_string.CNF" Destination="cmd_output_result2.REQ"/>
+				<Connection Source="summator.CNF" Destination="cmd_output_result1.REQ" dx1="452.94"/>
+			</EventConnections>
+			<DataConnections>
+				<Connection Source="real_randomizer.VAL" Destination="cmd_output_num2.IN" dx1="470.59"/>
+				<Connection Source="real_randomizer.VAL" Destination="cmd_output_num1.IN" dx1="482.35"/>
+				<Connection Source="real_randomizer.VAL" Destination="summator.IN1"/>
+				<Connection Source="real_randomizer.VAL" Destination="summator.IN2" dx1="1411.76"/>
+				<Connection Source="summator.OUT" Destination="real_to_string.IN" dx1="294.12"/>
+				<Connection Source="real_to_string.OUT" Destination="cmd_output_result2.IN" dx1="182.35"/>
+				<Connection Source="summator.OUT" Destination="cmd_output_result1.IN" dx1="452.94"/>
+			</DataConnections>
+		</SubAppNetwork>
+	</Application>
+	<Device Name="FORTE_PC" Type="FORTE_PC" x="4376.47" y="3458.82">
+		<Parameter Name="MGR_ID" Value="&quot;localhost:61499&quot;" Comment="Device manager socket ID"/>
+		<Attribute Name="Profile" Type="STRING" Value="HOLOBLOC"/>
+		<Attribute Name="Color" Type="STRING" Value="255,190,111"/>
+		<Resource Name="EMB_RES" Type="EMB_RES" x="0" y="0">
+			<FBNetwork>
+				<EventConnections>
+					<Connection Source="START.COLD" Destination="parserUnmappedTestApp.event_generator.START" dx1="264.71"/>
+					<Connection Source="START.WARM" Destination="parserUnmappedTestApp.event_generator.START" dx1="264.71"/>
+				</EventConnections>
+			</FBNetwork>
+		</Resource>
+	</Device>
+	<Segment Name="Ethernet" Type="Ethernet" x="4447.06" y="4517.65" dx1="1764.71">
+		<Attribute Name="Color" Type="STRING" Value="198,34,191"/>
+	</Segment>
+	<Mapping From="parserUnmappedTestApp.cmd_output_num2" To="FORTE_PC.EMB_RES"/>
+	<Mapping From="parserUnmappedTestApp.real_randomizer" To="FORTE_PC.EMB_RES"/>
+	<Mapping From="parserUnmappedTestApp.cmd_output_num1" To="FORTE_PC.EMB_RES"/>
+	<Mapping From="parserUnmappedTestApp.event_generator" To="FORTE_PC.EMB_RES"/>
+	<Mapping From="parserUnmappedTestApp.cmd_output_result1" To="FORTE_PC.EMB_RES"/>
+	<Mapping From="parserUnmappedTestApp.summator" To="FORTE_PC.EMB_RES"/>
+	<Link SegmentName="Ethernet" CommResource="FORTE_PC" Comment="">
+	</Link>
+</System>

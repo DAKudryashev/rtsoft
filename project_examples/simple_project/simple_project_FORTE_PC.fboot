@@ -1,0 +1,14 @@
+;<Request ID="1" Action="CREATE"><FB Name="EMB_RES" Type="EMB_RES" /></Request>
+EMB_RES;<Request ID="2" Action="CREATE"><FB Name="simple_projectApp.E_CYCLE" Type="E_CYCLE" /></Request>
+EMB_RES;<Request ID="3" Action="WRITE"><Connection Source="T#2s" Destination="simple_projectApp.E_CYCLE.DT" /></Request>
+EMB_RES;<Request ID="4" Action="CREATE"><FB Name="simple_projectApp.STRING2STRING" Type="STRING2STRING" /></Request>
+EMB_RES;<Request ID="5" Action="WRITE"><Connection Source="&apos;hello&apos;" Destination="simple_projectApp.STRING2STRING.IN" /></Request>
+EMB_RES;<Request ID="6" Action="CREATE"><FB Name="simple_projectApp.OUT_ANY_CONSOLE" Type="OUT_ANY_CONSOLE" /></Request>
+EMB_RES;<Request ID="7" Action="WRITE"><Connection Source="TRUE" Destination="simple_projectApp.OUT_ANY_CONSOLE.QI" /></Request>
+EMB_RES;<Request ID="8" Action="WRITE"><Connection Source="&apos;world!&apos;" Destination="simple_projectApp.OUT_ANY_CONSOLE.LABEL" /></Request>
+EMB_RES;<Request ID="9" Action="CREATE"><Connection Source="simple_projectApp.E_CYCLE.EO" Destination="simple_projectApp.STRING2STRING.REQ" /></Request>
+EMB_RES;<Request ID="10" Action="CREATE"><Connection Source="simple_projectApp.STRING2STRING.CNF" Destination="simple_projectApp.OUT_ANY_CONSOLE.REQ" /></Request>
+EMB_RES;<Request ID="11" Action="CREATE"><Connection Source="START.COLD" Destination="simple_projectApp.E_CYCLE.START" /></Request>
+EMB_RES;<Request ID="12" Action="CREATE"><Connection Source="START.WARM" Destination="simple_projectApp.E_CYCLE.START" /></Request>
+EMB_RES;<Request ID="13" Action="CREATE"><Connection Source="simple_projectApp.STRING2STRING.OUT" Destination="simple_projectApp.OUT_ANY_CONSOLE.IN" /></Request>
+EMB_RES;<Request ID="14" Action="START"/>

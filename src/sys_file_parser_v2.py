@@ -45,9 +45,6 @@ class SysFileParser:
                 self.delete_unmapped_fbs()
                 self.parse_connections()
 
-                # Print results
-                self.check_results()
-
             else:
                 raise ValueError('Incorrect sys file path input')
         else:
@@ -170,13 +167,13 @@ class SysFileParser:
                     self.connections.append(Connection(source=source, destination=destination, resource=res))
 
     # Print results of parsing
-    def check_results(self):
+    def print_results(self):
         print(f'application name: {self.application_name}')
-        print(f'mapped FBs: {self.fbs}')
-        print(f'mapped Parameters: {self.parameters}')
+        print('mapped FBs:\n', ',\n\t'.join(f'{i}' for i in self.fbs), sep='\t')
+        print('mapped Parameters:\n', ',\n\t'.join(f'{i}' for i in self.parameters), sep='\t')
         print(f'device name: {self.device_name}')
-        print(f'resources: {self.resources}')
-        print(f'mapped connections: {self.connections}')
+        print('resources:\n', ',\n\t'.join(f'{i}' for i in self.resources), sep='\t')
+        print('mapped connections:\n', ',\n\t'.join(f'{i}' for i in self.connections), sep='\t')
 
     def get_data(self):
         return [self.application_name, self.fbs, self.parameters, self.device_name, self.resources, self.connections]

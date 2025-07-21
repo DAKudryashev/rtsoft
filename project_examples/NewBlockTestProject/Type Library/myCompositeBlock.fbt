@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="myCompositeBlock" Comment="Composite FB wrapping other FBs">
+	<Identification Standard="61499-2">
+	</Identification>
+	<VersionInfo Version="1.0" Author="dakudryashev" Date="2025-07-11">
+	</VersionInfo>
+	<CompilerInfo>
+	</CompilerInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="INIT" Type="EInit" Comment="Initialization Request">
+				<With Var="QI"/>
+			</Event>
+			<Event Name="REQ" Type="Event" Comment="Normal Execution Request">
+				<With Var="QI"/>
+				<With Var="DI1"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="INITO" Type="EInit" Comment="Initialization Confirm">
+				<With Var="QO"/>
+			</Event>
+			<Event Name="CNF" Type="Event" Comment="Execution Confirmation">
+				<With Var="QO"/>
+				<With Var="DO1"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="QI" Type="BOOL" Comment="Input event qualifier"/>
+			<VarDeclaration Name="DI1" Type="INT"/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="QO" Type="BOOL" Comment="Output event qualifier"/>
+			<VarDeclaration Name="DO1" Type="INT"/>
+		</OutputVars>
+	</InterfaceList>
+	<FBNetwork>
+		<FB Name="INT2INT" Type="INT2INT" x="600" y="1000">
+			<Parameter Name="IN" Value="1"/>
+		</FB>
+		<FB Name="F_ADD" Type="F_ADD" x="2100" y="2400">
+		</FB>
+		<EventConnections>
+			<Connection Source="REQ" Destination="INT2INT.REQ" dx1="1682.35"/>
+			<Connection Source="INT2INT.CNF" Destination="F_ADD.REQ" dx1="458.82"/>
+			<Connection Source="F_ADD.CNF" Destination="CNF" dx1="1911.76"/>
+			<Connection Source="INIT" Destination="INITO"/>
+		</EventConnections>
+		<DataConnections>
+			<Connection Source="INT2INT.OUT" Destination="F_ADD.IN1" dx1="223.53"/>
+			<Connection Source="DI1" Destination="F_ADD.IN2" dx1="1323.53"/>
+			<Connection Source="F_ADD.OUT" Destination="DO1" dx1="2429.41"/>
+		</DataConnections>
+	</FBNetwork>
+</FBType>

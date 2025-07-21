@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<System Name="NewBlockTestProject">
+	<VersionInfo Version="1.0" Author="dakudryashev" Date="2025-07-09">
+	</VersionInfo>
+	<Application Name="NewBlockTestProjectApp">
+		<SubAppNetwork>
+			<FB Name="mySimpleBlock" Type="mySimpleBlock" x="1100" y="1900">
+				<Parameter Name="DI1" Value="5"/>
+				<Parameter Name="DI2" Value="9"/>
+			</FB>
+			<SubApp Name="mySubAppBlock" Type="mySubAppBlock" x="4600" y="1700">
+				<Parameter Name="QI" Value="TRUE"/>
+			</SubApp>
+			<FB Name="myCompositeBlock" Type="myCompositeBlock" x="3100" y="1800">
+				<Parameter Name="QI" Value="TRUE"/>
+			</FB>
+			<EventConnections>
+				<Connection Source="mySimpleBlock.CNF" Destination="myCompositeBlock.REQ"/>
+				<Connection Source="myCompositeBlock.CNF" Destination="mySubAppBlock.REQ" dx1="247.06"/>
+			</EventConnections>
+			<DataConnections>
+				<Connection Source="mySimpleBlock.DO1" Destination="myCompositeBlock.DI1" dx1="570.59"/>
+				<Connection Source="myCompositeBlock.DO1" Destination="mySubAppBlock.DI1" dx1="247.06"/>
+			</DataConnections>
+		</SubAppNetwork>
+	</Application>
+	<Device Name="FORTE_PC" Type="FORTE_PC" x="3923.53" y="1435.29">
+		<Parameter Name="MGR_ID" Value="&quot;localhost:61499&quot;" Comment="Device manager socket ID"/>
+		<Attribute Name="Profile" Type="STRING" Value="HOLOBLOC"/>
+		<Attribute Name="Color" Type="STRING" Value="255,190,111"/>
+		<Resource Name="EMB_RES" Type="EMB_RES" x="0" y="0">
+			<FBNetwork>
+				<EventConnections>
+					<Connection Source="START.COLD" Destination="NewBlockTestProjectApp.mySimpleBlock.REQ" dx1="411.76"/>
+				</EventConnections>
+			</FBNetwork>
+		</Resource>
+	</Device>
+	<Segment Name="Ethernet" Type="Ethernet" x="4382.35" y="2664.71" dx1="1764.71">
+		<Attribute Name="Color" Type="STRING" Value="205,67,136"/>
+	</Segment>
+	<Mapping From="NewBlockTestProjectApp.mySimpleBlock" To="FORTE_PC.EMB_RES"/>
+	<Mapping From="NewBlockTestProjectApp.mySubAppBlock" To="FORTE_PC.EMB_RES"/>
+	<Mapping From="NewBlockTestProjectApp.myCompositeBlock" To="FORTE_PC.EMB_RES"/>
+	<Link SegmentName="Ethernet" CommResource="FORTE_PC" Comment="">
+	</Link>
+</System>

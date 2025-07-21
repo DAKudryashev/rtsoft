@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SubAppType Name="mySubAppBlock" Comment="Subapplication Type">
+	<Identification Standard="61499-2">
+	</Identification>
+	<VersionInfo Version="1.0" Author="dakudryashev" Date="2025-07-11">
+	</VersionInfo>
+	<CompilerInfo>
+	</CompilerInfo>
+	<SubAppInterfaceList>
+		<SubAppEventInputs>
+			<SubAppEvent Name="INIT" Type="EInit" Comment="Initialization Request">
+			</SubAppEvent>
+			<SubAppEvent Name="REQ" Type="Event" Comment="Normal Execution Request">
+			</SubAppEvent>
+		</SubAppEventInputs>
+		<SubAppEventOutputs>
+			<SubAppEvent Name="INITO" Type="EInit" Comment="Initialization Confirm">
+			</SubAppEvent>
+			<SubAppEvent Name="CNF" Type="Event" Comment="Execution Confirmation">
+			</SubAppEvent>
+		</SubAppEventOutputs>
+		<InputVars>
+			<VarDeclaration Name="QI" Type="BOOL" Comment="Input event qualifier"/>
+			<VarDeclaration Name="DI1" Type="INT"/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="QO" Type="BOOL" Comment="Output event qualifier"/>
+		</OutputVars>
+	</SubAppInterfaceList>
+	<SubAppNetwork>
+		<FB Name="F_INT_AS_STRING" Type="F_INT_AS_STRING" x="2800" y="1200">
+		</FB>
+		<FB Name="OUT_ANY_CONSOLE" Type="OUT_ANY_CONSOLE" x="5100" y="1200">
+			<Parameter Name="QI" Value="TRUE"/>
+			<Parameter Name="LABEL" Value="'result'"/>
+		</FB>
+		<EventConnections>
+			<Connection Source="REQ" Destination="F_INT_AS_STRING.REQ" dx1="2211.76"/>
+			<Connection Source="F_INT_AS_STRING.CNF" Destination="OUT_ANY_CONSOLE.REQ"/>
+			<Connection Source="OUT_ANY_CONSOLE.CNF" Destination="CNF" dx1="3047.06"/>
+			<Connection Source="INIT" Destination="INITO"/>
+		</EventConnections>
+		<DataConnections>
+			<Connection Source="DI1" Destination="F_INT_AS_STRING.IN" dx1="1605.88"/>
+			<Connection Source="F_INT_AS_STRING.OUT" Destination="OUT_ANY_CONSOLE.IN" dx1="670.59"/>
+			<Connection Source="OUT_ANY_CONSOLE.QO" Destination="QO" dx1="3405.88"/>
+		</DataConnections>
+	</SubAppNetwork>
+</SubAppType>

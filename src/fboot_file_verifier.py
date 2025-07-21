@@ -36,11 +36,10 @@ class FbootFileVerifier:
         if self.file_path:
             if self.file_path[-6:] == '.fboot':
                 self.verify_commands()
-                self.print_results()
             else:
                 raise TypeError('Incorrect fboot file path input')
         else:
-            raise  TypeError('Empty fboot file path')
+            raise TypeError('Empty fboot file path')
 
     def verify_commands(self):
         with open(self.file_path, 'r') as f:
@@ -50,6 +49,10 @@ class FbootFileVerifier:
                 while '&apos;' in line:
                     line = line.replace('&apos;', "'")
 
+                # "&quot;" -> '"' in line of fboot
+                while '&quot;' in line:
+                    line = line.replace('&quot;', '"')
+
                 cnt += 1
                 res, command = line.strip().split(sep=';', maxsplit=1)
 
@@ -57,12 +60,12 @@ class FbootFileVerifier:
                 if not res:
                     # Parse command
                     start_name = command.find('FB Name="') + len('FB Name="')
-                    short_name = command[start_name:command.find('"', start_name)]
+                    short_name = command[start_name:command.find('" Type="', start_name)]
 
                     full_name = self.sys_device_name + '.' + short_name
 
                     start_type = command.find('Type="') + len('Type="')
-                    res_type = command[start_type:command.find('"', start_type)]
+                    res_type = command[start_type:command.find('" />', start_type)]
 
                     self.current_resource = Resource(short_name=short_name, res_type=res_type, full_name=full_name)
 
@@ -72,7 +75,7 @@ class FbootFileVerifier:
                         if sys_resource == self.current_resource:
                             self.sys_resources.remove(sys_resource)
                             self.unstarted_resources.append(sys_resource)
-                            print(f'deleted: {sys_resource}, resources left to check: {self.sys_resources}')
+                            print(f'found: {sys_resource}, resources left to check: {len(self.sys_resources)}')
                             successfully = True
                             break
 
@@ -84,10 +87,10 @@ class FbootFileVerifier:
                 elif command.find('Action="CREATE"><FB') != -1:
                     # Parse command
                     start_name = command.find('FB Name="') + len('FB Name="')
-                    name = command[start_name:command.find('"', start_name)]
+                    name = command[start_name:command.find('" Type="', start_name)]
 
                     start_type = command.find('Type="') + len('Type="')
-                    fb_type = command[start_type:command.find('"', start_type)]
+                    fb_type = command[start_type:command.find('" />', start_type)]
 
                     self.current_fb = FB(name=name, fb_type=fb_type, resource=res)
 
@@ -96,7 +99,7 @@ class FbootFileVerifier:
                     for sys_fb in self.sys_fbs:
                         if sys_fb == self.current_fb:
                             self.sys_fbs.remove(sys_fb)
-                            print(f'deleted: {sys_fb}, fbs left to check: {self.sys_fbs}')
+                            print(f'found: {sys_fb}, fbs left to check: {len(self.sys_fbs)}')
                             successfully = True
                             break
                     if not successfully:
@@ -107,21 +110,25 @@ class FbootFileVerifier:
                 elif command.find('Action="WRITE"') != -1:
                     # Parse command
                     value_start = command.find('Connection Source="') + len('Connection Source="')
-                    value = command[value_start:command.find('"', value_start)]
+                    value = command[value_start:command.find('" Destination="', value_start)]
 
                     destination_start = command.find('Destination="') + len('Destination="')
-                    destination = command[destination_start:command.find('"', destination_start)]
+                    destination = command[destination_start:command.find('" />', destination_start)]
 
                     self.current_parameter = Parameter(value=value, destination=destination, fb=self.current_fb)
 
                     # Check
                     successfully = False
                     for sys_param in self.sys_parameters:
-                        if sys_param == self.current_parameter:
-                            self.sys_parameters.remove(sys_param)
-                            print(f'deleted: {sys_param}, parameters left to check: {self.sys_parameters}')
-                            successfully = True
-                            break
+                        if (sys_param.fb == self.current_parameter.fb
+                                and sys_param.destination == self.current_parameter.destination):
+                            if sys_param.value != self.current_parameter:
+                                self.recount_int_parameter()
+                            if sys_param.value == self.current_parameter.value:
+                                self.sys_parameters.remove(sys_param)
+                                print(f'found: {sys_param}, parameters left to check: {len(self.sys_parameters)}')
+                                successfully = True
+                                break
                     if not successfully:
                         print('Ошибка в записи параметра на ФБ, строка fboot:', cnt)
                         self.difference.append(self.current_parameter)
@@ -130,10 +137,10 @@ class FbootFileVerifier:
                 elif command.find('Action="CREATE"><Connection') != -1:
                     # Parse command
                     source_start = command.find('Connection Source="') + len('Connection Source="')
-                    source = command[source_start:command.find('"', source_start)]
+                    source = command[source_start:command.find('" Destination="', source_start)]
 
                     destination_start = command.find('Destination="') + len('Destination="')
-                    destination = command[destination_start:command.find('"', destination_start)]
+                    destination = command[destination_start:command.find('" />', destination_start)]
 
                     self.current_connection = Connection(source=source, destination=destination, resource=res)
 
@@ -142,7 +149,7 @@ class FbootFileVerifier:
                     for sys_conn in self.sys_connections:
                         if sys_conn == self.current_connection:
                             self.sys_connections.remove(sys_conn)
-                            print(f'deleted: {sys_conn}, connections left to check: {self.sys_connections}')
+                            print(f'found: {sys_conn}, connections left to check: {len(self.sys_connections)}')
                             successfully = True
                             break
                     if not successfully:
@@ -158,23 +165,38 @@ class FbootFileVerifier:
                 else:
                     self.difference.append(f'unknown command, line {cnt}')
 
+    # if param like 'base#Digit_Base' recount it in decimal
+    def recount_int_parameter(self):
+        if '#' in self.current_parameter.value:
+            base, value = self.current_parameter.value.split('#', 1)
+            if base.isdigit():
+                base_int = int(base)
+                if 2 <= base_int <= 36:
+                    valid_chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'[:base_int]
+                    if all(c.upper() in valid_chars for c in value):
+                        try:
+                            decimal_value = str(int(value, base_int))
+                            self.current_parameter.value = decimal_value
+                        except ValueError:
+                            pass
+
+
     def print_results(self):
-        print('\n\n\n=====================\n\n\n')
         correct = True
-        for mas in (self.sys_fbs,
+        for mas in (self.sys_resources,
+                    self.sys_fbs,
                     self.sys_parameters,
-                    self.sys_resources,
                     self.sys_connections):
             if mas:
                 correct = False
-                print('Unresolved elements:')
+                print('Unresolved elements from sys:')
                 for i in mas:
-                    print(i, end=',')
+                    print(i, end=',\n')
         if self.unstarted_resources:
             correct = False
             print('unstarted resources:', ','.join(f'{i}' for i in self.unstarted_resources))
         if self.difference:
             correct = False
-            print('difference:', ','.join(f'{i}' for i in self.difference))
+            print('Unexpected elements from fboot:\n', ',\n'.join(f'{i}' for i in self.difference), sep='')
         if correct:
             print('Файл .fboot полностью соответствует файлу .sys')

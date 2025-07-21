@@ -19,9 +19,14 @@ if __name__ == '__main__':
 
     sys_file_parser = SysFileParser(args.sys)
     sys_file_parser.parse_sys_file()
+    sys_file_parser.print_results()
 
     print('\n\n\n=====================\n\n\n')
 
     fboot_file_verifier = FbootFileVerifier(args.fboot)
     fboot_file_verifier.set_data(sys_file_parser.get_data())
     fboot_file_verifier.parse_fboot_file()
+
+    print('\n\n\n=====================\n\n\n')
+
+    fboot_file_verifier.print_results()

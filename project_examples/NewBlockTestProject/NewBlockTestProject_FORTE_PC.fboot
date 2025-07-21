@@ -1,0 +1,18 @@
+;<Request ID="1" Action="CREATE"><FB Name="EMB_RES" Type="EMB_RES" /></Request>
+EMB_RES;<Request ID="2" Action="CREATE"><FB Name="NewBlockTestProjectApp.mySimpleBlock" Type="mySimpleBlock" /></Request>
+EMB_RES;<Request ID="3" Action="WRITE"><Connection Source="5" Destination="NewBlockTestProjectApp.mySimpleBlock.DI1" /></Request>
+EMB_RES;<Request ID="4" Action="WRITE"><Connection Source="9" Destination="NewBlockTestProjectApp.mySimpleBlock.DI2" /></Request>
+EMB_RES;<Request ID="5" Action="CREATE"><FB Name="NewBlockTestProjectApp.mySubAppBlock.F_INT_AS_STRING" Type="F_INT_AS_STRING" /></Request>
+EMB_RES;<Request ID="6" Action="CREATE"><FB Name="NewBlockTestProjectApp.mySubAppBlock.OUT_ANY_CONSOLE" Type="OUT_ANY_CONSOLE" /></Request>
+EMB_RES;<Request ID="7" Action="WRITE"><Connection Source="TRUE" Destination="NewBlockTestProjectApp.mySubAppBlock.OUT_ANY_CONSOLE.QI" /></Request>
+EMB_RES;<Request ID="8" Action="WRITE"><Connection Source="&apos;result&apos;" Destination="NewBlockTestProjectApp.mySubAppBlock.OUT_ANY_CONSOLE.LABEL" /></Request>
+EMB_RES;<Request ID="9" Action="CREATE"><FB Name="NewBlockTestProjectApp.myCompositeBlock" Type="myCompositeBlock" /></Request>
+EMB_RES;<Request ID="10" Action="WRITE"><Connection Source="TRUE" Destination="NewBlockTestProjectApp.myCompositeBlock.QI" /></Request>
+EMB_RES;<Request ID="11" Action="CREATE"><Connection Source="NewBlockTestProjectApp.mySubAppBlock.F_INT_AS_STRING.CNF" Destination="NewBlockTestProjectApp.mySubAppBlock.OUT_ANY_CONSOLE.REQ" /></Request>
+EMB_RES;<Request ID="12" Action="CREATE"><Connection Source="NewBlockTestProjectApp.mySubAppBlock.F_INT_AS_STRING.OUT" Destination="NewBlockTestProjectApp.mySubAppBlock.OUT_ANY_CONSOLE.IN" /></Request>
+EMB_RES;<Request ID="13" Action="CREATE"><Connection Source="NewBlockTestProjectApp.mySimpleBlock.CNF" Destination="NewBlockTestProjectApp.myCompositeBlock.REQ" /></Request>
+EMB_RES;<Request ID="14" Action="CREATE"><Connection Source="NewBlockTestProjectApp.myCompositeBlock.CNF" Destination="NewBlockTestProjectApp.mySubAppBlock.F_INT_AS_STRING.REQ" /></Request>
+EMB_RES;<Request ID="15" Action="CREATE"><Connection Source="START.COLD" Destination="NewBlockTestProjectApp.mySimpleBlock.REQ" /></Request>
+EMB_RES;<Request ID="16" Action="CREATE"><Connection Source="NewBlockTestProjectApp.mySimpleBlock.DO1" Destination="NewBlockTestProjectApp.myCompositeBlock.DI1" /></Request>
+EMB_RES;<Request ID="17" Action="CREATE"><Connection Source="NewBlockTestProjectApp.myCompositeBlock.DO1" Destination="NewBlockTestProjectApp.mySubAppBlock.F_INT_AS_STRING.IN" /></Request>
+EMB_RES;<Request ID="18" Action="START"/>

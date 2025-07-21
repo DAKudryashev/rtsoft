@@ -1,0 +1,36 @@
+;<Request ID="1" Action="CREATE"><FB Name="EMB_RES" Type="EMB_RES" /></Request>
+EMB_RES;<Request ID="2" Action="CREATE"><FB Name="parserMultiResTestApp.OUT_ANY_CONSOLE" Type="OUT_ANY_CONSOLE" /></Request>
+EMB_RES;<Request ID="3" Action="WRITE"><Connection Source="TRUE" Destination="parserMultiResTestApp.OUT_ANY_CONSOLE.QI" /></Request>
+EMB_RES;<Request ID="4" Action="CREATE"><FB Name="parserMultiResTestApp.E_CYCLE_2" Type="E_CYCLE" /></Request>
+EMB_RES;<Request ID="5" Action="WRITE"><Connection Source="T#2s" Destination="parserMultiResTestApp.E_CYCLE_2.DT" /></Request>
+EMB_RES;<Request ID="6" Action="CREATE"><FB Name="parserMultiResTestApp.STRING2STRING" Type="STRING2STRING" /></Request>
+EMB_RES;<Request ID="7" Action="WRITE"><Connection Source="&apos;first part&apos;" Destination="parserMultiResTestApp.STRING2STRING.IN" /></Request>
+EMB_RES;<Request ID="8" Action="CREATE"><Connection Source="parserMultiResTestApp.E_CYCLE_2.EO" Destination="parserMultiResTestApp.STRING2STRING.REQ" /></Request>
+EMB_RES;<Request ID="9" Action="CREATE"><Connection Source="parserMultiResTestApp.STRING2STRING.CNF" Destination="parserMultiResTestApp.OUT_ANY_CONSOLE.REQ" /></Request>
+EMB_RES;<Request ID="10" Action="CREATE"><Connection Source="START.COLD" Destination="parserMultiResTestApp.E_CYCLE_2.START" /></Request>
+EMB_RES;<Request ID="11" Action="CREATE"><Connection Source="parserMultiResTestApp.STRING2STRING.OUT" Destination="parserMultiResTestApp.OUT_ANY_CONSOLE.IN" /></Request>
+EMB_RES;<Request ID="12" Action="START"/>
+;<Request ID="13" Action="CREATE"><FB Name="EMB_RES_1" Type="EMB_RES" /></Request>
+EMB_RES_1;<Request ID="14" Action="CREATE"><FB Name="parserMultiResTestApp.OUT_ANY_CONSOLE_1" Type="OUT_ANY_CONSOLE" /></Request>
+EMB_RES_1;<Request ID="15" Action="WRITE"><Connection Source="TRUE" Destination="parserMultiResTestApp.OUT_ANY_CONSOLE_1.QI" /></Request>
+EMB_RES_1;<Request ID="16" Action="CREATE"><FB Name="parserMultiResTestApp.E_CYCLE_8" Type="E_CYCLE" /></Request>
+EMB_RES_1;<Request ID="17" Action="WRITE"><Connection Source="T#8s" Destination="parserMultiResTestApp.E_CYCLE_8.DT" /></Request>
+EMB_RES_1;<Request ID="18" Action="CREATE"><FB Name="parserMultiResTestApp.STRING2STRING_1" Type="STRING2STRING" /></Request>
+EMB_RES_1;<Request ID="19" Action="WRITE"><Connection Source="&apos;second part&apos;" Destination="parserMultiResTestApp.STRING2STRING_1.IN" /></Request>
+EMB_RES_1;<Request ID="20" Action="CREATE"><Connection Source="parserMultiResTestApp.E_CYCLE_8.EO" Destination="parserMultiResTestApp.STRING2STRING_1.REQ" /></Request>
+EMB_RES_1;<Request ID="21" Action="CREATE"><Connection Source="parserMultiResTestApp.STRING2STRING_1.CNF" Destination="parserMultiResTestApp.OUT_ANY_CONSOLE_1.REQ" /></Request>
+EMB_RES_1;<Request ID="22" Action="CREATE"><Connection Source="START.COLD" Destination="parserMultiResTestApp.E_CYCLE_8.START" /></Request>
+EMB_RES_1;<Request ID="23" Action="CREATE"><Connection Source="parserMultiResTestApp.STRING2STRING_1.OUT" Destination="parserMultiResTestApp.OUT_ANY_CONSOLE_1.IN" /></Request>
+EMB_RES_1;<Request ID="24" Action="START"/>
+;<Request ID="25" Action="CREATE"><FB Name="EMB_RES_2" Type="EMB_RES" /></Request>
+EMB_RES_2;<Request ID="26" Action="CREATE"><FB Name="parserMultiResTestApp.STRING2STRING_2" Type="STRING2STRING" /></Request>
+EMB_RES_2;<Request ID="27" Action="WRITE"><Connection Source="&apos;third part&apos;" Destination="parserMultiResTestApp.STRING2STRING_2.IN" /></Request>
+EMB_RES_2;<Request ID="28" Action="CREATE"><FB Name="parserMultiResTestApp.OUT_ANY_CONSOLE_2" Type="OUT_ANY_CONSOLE" /></Request>
+EMB_RES_2;<Request ID="29" Action="WRITE"><Connection Source="TRUE" Destination="parserMultiResTestApp.OUT_ANY_CONSOLE_2.QI" /></Request>
+EMB_RES_2;<Request ID="30" Action="CREATE"><FB Name="parserMultiResTestApp.E_CYCLE_10" Type="E_CYCLE" /></Request>
+EMB_RES_2;<Request ID="31" Action="WRITE"><Connection Source="T#10s" Destination="parserMultiResTestApp.E_CYCLE_10.DT" /></Request>
+EMB_RES_2;<Request ID="32" Action="CREATE"><Connection Source="parserMultiResTestApp.STRING2STRING_2.CNF" Destination="parserMultiResTestApp.OUT_ANY_CONSOLE_2.REQ" /></Request>
+EMB_RES_2;<Request ID="33" Action="CREATE"><Connection Source="parserMultiResTestApp.E_CYCLE_10.EO" Destination="parserMultiResTestApp.STRING2STRING_2.REQ" /></Request>
+EMB_RES_2;<Request ID="34" Action="CREATE"><Connection Source="START.COLD" Destination="parserMultiResTestApp.E_CYCLE_10.START" /></Request>
+EMB_RES_2;<Request ID="35" Action="CREATE"><Connection Source="parserMultiResTestApp.STRING2STRING_2.OUT" Destination="parserMultiResTestApp.OUT_ANY_CONSOLE_2.IN" /></Request>
+EMB_RES_2;<Request ID="36" Action="START"/>

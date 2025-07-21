@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<System Name="RW_OPCUAC">
+	<VersionInfo Version="1.0" Author="obotnar" Date="2025-04-23">
+	</VersionInfo>
+	<Application Name="RW_OPCUACApp">
+		<SubAppNetwork>
+			<FB Name="OPCUAC_8" Type="OPCUAC_8" x="3700" y="-200">
+				<Parameter Name="QI" Value="TRUE"/>
+				<Parameter Name="PARAMS" Value="'{&quot;url&quot;:&quot;opc.tcp://localhost:4843&quot;}'">
+					<Attribute Name="OpcMapping" Value="false"/>
+				</Parameter>
+				<Parameter Name="IO0" Value="'.IX'"/>
+				<Parameter Name="IO1" Value="'.QX'"/>
+				<Parameter Name="IO2" Value="'.IB'"/>
+				<Parameter Name="IO3" Value="'.QB'"/>
+				<Parameter Name="IO4" Value="'.ID'"/>
+				<Parameter Name="IO5" Value="'.QD'"/>
+				<Parameter Name="IO6" Value="'.IW'"/>
+				<Parameter Name="IO7" Value="'.QW'"/>
+			</FB>
+			<FB Name="IX" Type="IX" x="1600" y="-800">
+				<Parameter Name="QI" Value="TRUE"/>
+				<Parameter Name="PARAMS" Value="'/Objects/2:Forte/2:test/2:QX'"/>
+			</FB>
+			<FB Name="IB" Type="IB" x="1600" y="300">
+				<Parameter Name="QI" Value="TRUE"/>
+				<Parameter Name="PARAMS" Value="'/Objects/2:Forte/2:test/2:QB'"/>
+			</FB>
+			<FB Name="ID" Type="ID" x="1700" y="2000">
+				<Parameter Name="QI" Value="TRUE"/>
+				<Parameter Name="PARAMS" Value="'/Objects/2:Forte/2:test/2:QD'"/>
+			</FB>
+			<FB Name="IW" Type="IW" x="600" y="1200">
+				<Parameter Name="QI" Value="TRUE"/>
+				<Parameter Name="PARAMS" Value="'ns=2;i=2'"/>
+			</FB>
+			<FB Name="QX" Type="QX" x="6200" y="-800">
+				<Parameter Name="QI" Value="TRUE"/>
+				<Parameter Name="PARAMS" Value="'/Objects/2:Forte/2:test/2:QX'"/>
+				<Parameter Name="OUT" Value="TRUE"/>
+			</FB>
+			<FB Name="QW" Type="QW" x="5900" y="1500">
+				<Parameter Name="QI" Value="TRUE"/>
+				<Parameter Name="PARAMS" Value="'/Objects/2:Forte/2:test/2:QW'"/>
+				<Parameter Name="OUT" Value="1345"/>
+			</FB>
+			<FB Name="QB" Type="QB" x="6400" y="500">
+				<Parameter Name="QI" Value="TRUE"/>
+				<Parameter Name="PARAMS" Value="'/Objects/2:Forte/2:test/2:QB'"/>
+				<Parameter Name="OUT" Value="99"/>
+			</FB>
+			<FB Name="QD" Type="QD" x="4900" y="2300">
+				<Parameter Name="QI" Value="TRUE"/>
+				<Parameter Name="PARAMS" Value="'/Objects/2:Forte/2:test/2:QD'"/>
+				<Parameter Name="OUT" Value="4096"/>
+			</FB>
+			<FB Name="E_CYCLE" Type="E_CYCLE" x="3900" y="1400">
+				<Parameter Name="DT" Value="T#300ms"/>
+			</FB>
+			<EventConnections>
+				<Connection Source="OPCUAC_8.MAPO" Destination="IX.INIT" dx1="70.59" dx2="70.59" dy="-782.35"/>
+				<Connection Source="IX.INITO" Destination="IB.INIT" dx1="70.59" dx2="70.59" dy="829.41"/>
+				<Connection Source="IB.INITO" Destination="IW.INIT" dx1="70.59" dx2="70.59" dy="711.76"/>
+				<Connection Source="IW.INITO" Destination="ID.INIT" dx1="211.76"/>
+				<Connection Source="OPCUAC_8.MAPO" Destination="QX.INIT" dx1="70.59"/>
+				<Connection Source="QX.INITO" Destination="QB.INIT" dx1="70.59" dx2="70.59" dy="652.94"/>
+				<Connection Source="QB.INITO" Destination="QW.INIT" dx1="70.59" dx2="70.59" dy="717.65"/>
+				<Connection Source="QW.INITO" Destination="QD.INIT" dx1="70.59" dx2="70.59" dy="611.76"/>
+				<Connection Source="E_CYCLE.EO" Destination="QD.REQ" dx1="147.06"/>
+				<Connection Source="E_CYCLE.EO" Destination="QW.REQ" dx1="141.18"/>
+				<Connection Source="E_CYCLE.EO" Destination="QB.REQ" dx1="147.06"/>
+				<Connection Source="E_CYCLE.EO" Destination="QX.REQ" dx1="152.94"/>
+			</EventConnections>
+		</SubAppNetwork>
+	</Application>
+	<Device Name="FORTE_PC" Type="FORTE_PC" x="5188.24" y="1300">
+		<Parameter Name="MGR_ID" Value="&quot;localhost:61499&quot;" Comment="Device manager socket ID"/>
+		<Attribute Name="Profile" Type="STRING" Value="HOLOBLOC"/>
+		<Attribute Name="Color" Type="STRING" Value="255,190,111"/>
+		<Resource Name="EMB_RES" Type="EMB_RES" x="0" y="0">
+			<FBNetwork>
+				<EventConnections>
+					<Connection Source="START.COLD" Destination="RW_OPCUACApp.OPCUAC_8.MAP" dx1="1935.29"/>
+					<Connection Source="START.COLD" Destination="RW_OPCUACApp.E_CYCLE.START" dx1="1111.76"/>
+				</EventConnections>
+			</FBNetwork>
+		</Resource>
+	</Device>
+	<Segment Name="Ethernet" Type="Ethernet" x="4800" y="564.71" dx1="1764.71">
+		<Attribute Name="Color" Type="STRING" Value="143,211,73"/>
+	</Segment>
+	<Mapping From="RW_OPCUACApp.OPCUAC_8" To="FORTE_PC.EMB_RES"/>
+	<Mapping From="RW_OPCUACApp.IX" To="FORTE_PC.EMB_RES"/>
+	<Mapping From="RW_OPCUACApp.IB" To="FORTE_PC.EMB_RES"/>
+	<Mapping From="RW_OPCUACApp.ID" To="FORTE_PC.EMB_RES"/>
+	<Mapping From="RW_OPCUACApp.IW" To="FORTE_PC.EMB_RES"/>
+	<Mapping From="RW_OPCUACApp.QX" To="FORTE_PC.EMB_RES"/>
+	<Mapping From="RW_OPCUACApp.QW" To="FORTE_PC.EMB_RES"/>
+	<Mapping From="RW_OPCUACApp.QB" To="FORTE_PC.EMB_RES"/>
+	<Mapping From="RW_OPCUACApp.QD" To="FORTE_PC.EMB_RES"/>
+	<Mapping From="RW_OPCUACApp.E_CYCLE" To="FORTE_PC.EMB_RES"/>
+	<Link SegmentName="Ethernet" CommResource="FORTE_PC" Comment="">
+	</Link>
+</System>

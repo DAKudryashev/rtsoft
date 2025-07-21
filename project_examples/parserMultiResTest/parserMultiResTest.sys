@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<System Name="parserMultiResTest">
+	<VersionInfo Version="1.0" Author="dakudryashev" Date="2025-07-20">
+	</VersionInfo>
+	<Application Name="parserMultiResTestApp">
+		<SubAppNetwork>
+			<FB Name="E_CYCLE_2" Type="E_CYCLE" x="1100" y="800">
+				<Parameter Name="DT" Value="T#2s"/>
+			</FB>
+			<FB Name="STRING2STRING" Type="STRING2STRING" x="2900" y="800">
+				<Parameter Name="IN" Value="'first part'"/>
+			</FB>
+			<FB Name="STRING2STRING_1" Type="STRING2STRING" x="2900" y="2000">
+				<Parameter Name="IN" Value="'second part'"/>
+			</FB>
+			<FB Name="OUT_ANY_CONSOLE" Type="OUT_ANY_CONSOLE" x="4900" y="800">
+				<Parameter Name="QI" Value="TRUE"/>
+			</FB>
+			<FB Name="STRING2STRING_2" Type="STRING2STRING" x="3000" y="3400">
+				<Parameter Name="IN" Value="'third part'"/>
+			</FB>
+			<FB Name="E_CYCLE_8" Type="E_CYCLE" x="1100" y="2000">
+				<Parameter Name="DT" Value="T#8s"/>
+			</FB>
+			<FB Name="E_CYCLE_10" Type="E_CYCLE" x="1100" y="3400">
+				<Parameter Name="DT" Value="T#10s"/>
+			</FB>
+			<FB Name="OUT_ANY_CONSOLE_1" Type="OUT_ANY_CONSOLE" x="4900" y="2000">
+				<Parameter Name="QI" Value="TRUE"/>
+			</FB>
+			<FB Name="OUT_ANY_CONSOLE_2" Type="OUT_ANY_CONSOLE" x="4900" y="3400">
+				<Parameter Name="QI" Value="TRUE"/>
+			</FB>
+			<EventConnections>
+				<Connection Source="E_CYCLE_2.EO" Destination="STRING2STRING.REQ"/>
+				<Connection Source="E_CYCLE_8.EO" Destination="STRING2STRING_1.REQ"/>
+				<Connection Source="E_CYCLE_10.EO" Destination="STRING2STRING_2.REQ"/>
+				<Connection Source="STRING2STRING_2.CNF" Destination="OUT_ANY_CONSOLE_2.REQ"/>
+				<Connection Source="STRING2STRING_1.CNF" Destination="OUT_ANY_CONSOLE_1.REQ"/>
+				<Connection Source="STRING2STRING.CNF" Destination="OUT_ANY_CONSOLE.REQ"/>
+			</EventConnections>
+			<DataConnections>
+				<Connection Source="STRING2STRING.OUT" Destination="OUT_ANY_CONSOLE.IN" dx1="570.59"/>
+				<Connection Source="STRING2STRING_1.OUT" Destination="OUT_ANY_CONSOLE_1.IN" dx1="570.59"/>
+				<Connection Source="STRING2STRING_2.OUT" Destination="OUT_ANY_CONSOLE_2.IN" dx1="517.65"/>
+			</DataConnections>
+		</SubAppNetwork>
+	</Application>
+	<Device Name="FORTE_PC" Type="FORTE_PC" x="3152.94" y="1152.94">
+		<Parameter Name="MGR_ID" Value="&quot;localhost:61499&quot;" Comment="Device manager socket ID"/>
+		<Attribute Name="Profile" Type="STRING" Value="HOLOBLOC"/>
+		<Attribute Name="Color" Type="STRING" Value="255,190,111"/>
+		<Resource Name="EMB_RES" Type="EMB_RES" x="0" y="0">
+			<FBNetwork>
+				<EventConnections>
+					<Connection Source="START.COLD" Destination="parserMultiResTestApp.E_CYCLE_2.START" dx1="164.71"/>
+				</EventConnections>
+			</FBNetwork>
+		</Resource>
+		<Resource Name="EMB_RES_1" Type="EMB_RES" x="0" y="0">
+			<FBNetwork>
+				<EventConnections>
+					<Connection Source="START.COLD" Destination="parserMultiResTestApp.E_CYCLE_8.START" dx1="164.71"/>
+				</EventConnections>
+			</FBNetwork>
+		</Resource>
+		<Resource Name="EMB_RES_2" Type="EMB_RES" x="0" y="0">
+			<FBNetwork>
+				<EventConnections>
+					<Connection Source="START.COLD" Destination="parserMultiResTestApp.E_CYCLE_10.START" dx1="164.71"/>
+				</EventConnections>
+			</FBNetwork>
+		</Resource>
+	</Device>
+	<Segment Name="Ethernet" Type="Ethernet" x="3105.88" y="2258.82" dx1="1764.71">
+		<Attribute Name="Color" Type="STRING" Value="174,45,197"/>
+	</Segment>
+	<Mapping From="parserMultiResTestApp.OUT_ANY_CONSOLE" To="FORTE_PC.EMB_RES"/>
+	<Mapping From="parserMultiResTestApp.E_CYCLE_2" To="FORTE_PC.EMB_RES"/>
+	<Mapping From="parserMultiResTestApp.STRING2STRING" To="FORTE_PC.EMB_RES"/>
+	<Mapping From="parserMultiResTestApp.OUT_ANY_CONSOLE_1" To="FORTE_PC.EMB_RES_1"/>
+	<Mapping From="parserMultiResTestApp.E_CYCLE_8" To="FORTE_PC.EMB_RES_1"/>
+	<Mapping From="parserMultiResTestApp.STRING2STRING_1" To="FORTE_PC.EMB_RES_1"/>
+	<Mapping From="parserMultiResTestApp.STRING2STRING_2" To="FORTE_PC.EMB_RES_2"/>
+	<Mapping From="parserMultiResTestApp.OUT_ANY_CONSOLE_2" To="FORTE_PC.EMB_RES_2"/>
+	<Mapping From="parserMultiResTestApp.E_CYCLE_10" To="FORTE_PC.EMB_RES_2"/>
+	<Link SegmentName="Ethernet" CommResource="FORTE_PC" Comment="">
+	</Link>
+</System>
