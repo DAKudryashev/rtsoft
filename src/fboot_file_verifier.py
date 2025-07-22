@@ -183,20 +183,31 @@ class FbootFileVerifier:
 
     def print_results(self):
         correct = True
-        for mas in (self.sys_resources,
-                    self.sys_fbs,
-                    self.sys_parameters,
-                    self.sys_connections):
-            if mas:
+        for key, value in {'resources' : self.sys_resources,
+                           'FBs' : self.sys_fbs,
+                           'parameters' : self.sys_parameters,
+                           'connections' : self.sys_connections}.items():
+            if value:
                 correct = False
-                print('Unresolved elements from sys:')
-                for i in mas:
-                    print(i, end=',\n')
-        if self.unstarted_resources:
-            correct = False
-            print('unstarted resources:', ','.join(f'{i}' for i in self.unstarted_resources))
+                print(f'Unresolved {key} from sys:')
+                for i in value:
+                    # print(i, end=',\n')
+                    if key == 'resources':
+                        print(f'<Resource Name="{i.short_name}" Type="{i.res_type}"...>')
+                    elif key == 'FBs':
+                        print(f'<FB Name="{i.name.split('.', 1)[1]}" Type="{i.fb_type}"...>')
+                    elif key == 'parameters':
+                        print(f'<Parameter Name="{i.destination.split('.')[-1]}" Value="{i.value}"/>')
+                    else:
+                        print(f'<Connection Source="{i.source.split('.', 1)[1]}" Destination="{i.destination('.', 1)[1]}"...>')
+
         if self.difference:
             correct = False
             print('Unexpected elements from fboot:\n', ',\n'.join(f'{i}' for i in self.difference), sep='')
+
+        if self.unstarted_resources:
+            correct = False
+            print('unstarted resources:', ','.join(f'{i}' for i in self.unstarted_resources))
+
         if correct:
-            print('Файл .fboot полностью соответствует файлу .sys')
+            print('File .fboot fully complies with file .sys')
