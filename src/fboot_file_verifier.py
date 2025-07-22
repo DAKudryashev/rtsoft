@@ -13,7 +13,7 @@ class FbootFileVerifier:
         self.sys_connections = []
 
         self.unstarted_resources = []
-        self.difference = []
+        self.incorrect_lines = []
         self.current_resource = None
         self.current_fb = None
         self.current_parameter = None
@@ -45,16 +45,17 @@ class FbootFileVerifier:
         with open(self.file_path, 'r') as f:
             cnt = 0
             for line in f:
-                # "&apos;" -> "'" in line of fboot
-                while '&apos;' in line:
-                    line = line.replace('&apos;', "'")
+                tmp_line = line
+                # "&apos;" -> "'" in tmp_line of fboot
+                while '&apos;' in tmp_line:
+                    tmp_line = tmp_line.replace('&apos;', "'")
 
-                # "&quot;" -> '"' in line of fboot
-                while '&quot;' in line:
-                    line = line.replace('&quot;', '"')
+                # "&quot;" -> '"' in tmp_line of fboot
+                while '&quot;' in tmp_line:
+                    tmp_line = tmp_line.replace('&quot;', '"')
 
                 cnt += 1
-                res, command = line.strip().split(sep=';', maxsplit=1)
+                res, command = tmp_line.strip().split(sep=';', maxsplit=1)
 
                 # Collecting resources
                 if not res:
@@ -75,13 +76,13 @@ class FbootFileVerifier:
                         if sys_resource == self.current_resource:
                             self.sys_resources.remove(sys_resource)
                             self.unstarted_resources.append(sys_resource)
-                            print(f'found: {sys_resource}, resources left to check: {len(self.sys_resources)}')
+                            print(f'found: {sys_resource.full_name}, resources left to check: {len(self.sys_resources)}')
                             successfully = True
                             break
 
                     if not successfully:
-                        print('Ошибка в создании ресурса, строка fboot:', cnt)
-                        self.difference.append(self.current_resource)
+                        print('Incorrect resource creation writing in line:', cnt)
+                        self.incorrect_lines.append(line.strip())
 
                 # Collecting fbs
                 elif command.find('Action="CREATE"><FB') != -1:
@@ -99,12 +100,12 @@ class FbootFileVerifier:
                     for sys_fb in self.sys_fbs:
                         if sys_fb == self.current_fb:
                             self.sys_fbs.remove(sys_fb)
-                            print(f'found: {sys_fb}, fbs left to check: {len(self.sys_fbs)}')
+                            print(f'found: {sys_fb.name}, fbs left to check: {len(self.sys_fbs)}')
                             successfully = True
                             break
                     if not successfully:
-                        print('Ошибка в создании ФБ, строка fboot:', cnt)
-                        self.difference.append(self.current_fb)
+                        print('incorrect fb creation writing in line:', cnt)
+                        self.incorrect_lines.append(line.strip())
 
                 # Collecting fb parameters
                 elif command.find('Action="WRITE"') != -1:
@@ -126,12 +127,12 @@ class FbootFileVerifier:
                                 self.recount_int_parameter()
                             if sys_param.value == self.current_parameter.value:
                                 self.sys_parameters.remove(sys_param)
-                                print(f'found: {sys_param}, parameters left to check: {len(self.sys_parameters)}')
+                                print(f'found: {sys_param.value}, parameters left to check: {len(self.sys_parameters)}')
                                 successfully = True
                                 break
                     if not successfully:
-                        print('Ошибка в записи параметра на ФБ, строка fboot:', cnt)
-                        self.difference.append(self.current_parameter)
+                        print('incorrect writing fb parameter in line:', cnt)
+                        self.incorrect_lines.append(line.strip())
 
                 # Collecting connections
                 elif command.find('Action="CREATE"><Connection') != -1:
@@ -149,12 +150,12 @@ class FbootFileVerifier:
                     for sys_conn in self.sys_connections:
                         if sys_conn == self.current_connection:
                             self.sys_connections.remove(sys_conn)
-                            print(f'found: {sys_conn}, connections left to check: {len(self.sys_connections)}')
+                            print(f'found: {sys_conn.source}, connections left to check: {len(self.sys_connections)}')
                             successfully = True
                             break
                     if not successfully:
-                        print('Ошибка в записи связи между ФБ, строка fboot:', cnt)
-                        self.difference.append(self.current_connection)
+                        print('incorrect writing connection between fbs in line:', cnt)
+                        self.incorrect_lines.append(line.strip())
 
                 elif command.find('Action="START"'):
                     for resource in self.unstarted_resources:
@@ -163,7 +164,7 @@ class FbootFileVerifier:
                             break
 
                 else:
-                    self.difference.append(f'unknown command, line {cnt}')
+                    self.incorrect_lines.append(f'unknown command, line {cnt}')
 
     # if param like 'base#Digit_Base' recount it in decimal
     def recount_int_parameter(self):
@@ -200,10 +201,11 @@ class FbootFileVerifier:
                     else:
                         print(f'<Connection Source="{i.source if 'START.' in i.source else i.source.split('.', 1)[-1]}"'
                               f' Destination="{i.destination.split('.', 1)[-1]}"...>')
+                print()
 
-        if self.difference:
+        if self.incorrect_lines:
             correct = False
-            print('Unexpected elements from fboot:\n', ',\n'.join(f'{i}' for i in self.difference), sep='')
+            print('Unexpected elements from fboot in lines:\n', ',\n'.join(f'{i}' for i in self.incorrect_lines), sep='')
 
         if self.unstarted_resources:
             correct = False
