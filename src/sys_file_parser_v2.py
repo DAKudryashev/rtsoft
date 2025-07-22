@@ -103,14 +103,20 @@ class SysFileParser:
     # Deleting FBs without resource and their parameters
     def delete_unmapped_fbs(self):
         # Parameters
-        for param in self.parameters:
-            if not param.fb.resource:
-                self.parameters.remove(param)
+        cnt = 0
+        while cnt < len(self.parameters):
+            if not self.parameters[cnt].fb.resource:
+                self.parameters.pop(cnt)
+            else:
+                cnt += 1
 
         # FBs
-        for fb in self.fbs:
-            if not fb.resource:
-                self.fbs.remove(fb)
+        cnt = 0
+        while cnt < len(self.fbs):
+            if not self.fbs[cnt].resource:
+                self.fbs.pop(cnt)
+            else:
+                cnt += 1
 
     # Collecting connections and check if FBs are mapped with saving info about resources
     def parse_connections(self):
