@@ -191,15 +191,15 @@ class FbootFileVerifier:
                 correct = False
                 print(f'Unresolved {key} from sys:')
                 for i in value:
-                    # print(i, end=',\n')
                     if key == 'resources':
                         print(f'<Resource Name="{i.short_name}" Type="{i.res_type}"...>')
                     elif key == 'FBs':
-                        print(f'<FB Name="{i.name.split('.', 1)[1]}" Type="{i.fb_type}"...>')
+                        print(f'<FB Name="{i.name.split('.', 1)[-1]}" Type="{i.fb_type}"...>')
                     elif key == 'parameters':
-                        print(f'<Parameter Name="{i.destination.split('.')[-1]}" Value="{i.value}"/>')
+                        print(f'<Parameter Name="{i.destination.split('.')[-1]}" Value="{i.value}"...>')
                     else:
-                        print(f'<Connection Source="{i.source.split('.', 1)[1]}" Destination="{i.destination('.', 1)[1]}"...>')
+                        print(f'<Connection Source="{i.source if 'START.' in i.source else i.source.split('.', 1)[-1]}"'
+                              f' Destination="{i.destination.split('.', 1)[-1]}"...>')
 
         if self.difference:
             correct = False

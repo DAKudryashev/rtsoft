@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<System Name="IncorrectParserTest2">
+	<VersionInfo Version="1.0" Author="dakudryashev" Date="2025-07-22">
+	</VersionInfo>
+	<Application Name="IncorrectParserTest2App">
+		<SubAppNetwork>
+			<FB Name="E_CYCLE" Type="E_CYCLE" x="700" y="800">
+				<Parameter Name="DT" Value="T#5s"/>
+			</FB>
+			<FB Name="STRING2STRING" Type="STRING2STRING" x="2900" y="900">
+				<Parameter Name="IN" Value="'YES'"/>
+			</FB>
+			<FB Name="OUT_ANY_CONSOLE" Type="OUT_ANY_CONSOLE" x="4800" y="600">
+				<Parameter Name="QI" Value="TRUE"/>
+				<Parameter Name="LABEL" Value="'OK'"/>
+			</FB>
+			<EventConnections>
+				<Connection Source="E_CYCLE.EO" Destination="STRING2STRING.REQ" dx1="611.76"/>
+				<Connection Source="STRING2STRING.CNF" Destination="OUT_ANY_CONSOLE.REQ" dx1="470.59"/>
+			</EventConnections>
+			<DataConnections>
+				<Connection Source="STRING2STRING.OUT" Destination="OUT_ANY_CONSOLE.IN" dx1="517.65"/>
+			</DataConnections>
+		</SubAppNetwork>
+	</Application>
+	<Device Name="FORTE_PC" Type="FORTE_PC" x="4770.59" y="1141.18">
+		<Parameter Name="MGR_ID" Value="&quot;localhost:61499&quot;" Comment="Device manager socket ID"/>
+		<Attribute Name="Profile" Type="STRING" Value="HOLOBLOC"/>
+		<Attribute Name="Color" Type="STRING" Value="255,190,111"/>
+		<Resource Name="EMB_RES" Type="EMB_RES" x="0" y="0">
+			<FBNetwork>
+				<EventConnections>
+					<Connection Source="START.COLD" Destination="IncorrectParserTest2App.E_CYCLE.START" dx1="70.59" dx2="70.59" dy="400"/>
+				</EventConnections>
+			</FBNetwork>
+		</Resource>
+		<Resource Name="EMB_RES_1" Type="EMB_RES" x="0" y="0">
+			<FBNetwork>
+			</FBNetwork>
+		</Resource>
+	</Device>
+	<Segment Name="Ethernet" Type="Ethernet" x="4376.47" y="2117.65" dx1="1764.71">
+		<Attribute Name="Color" Type="STRING" Value="105,165,211"/>
+	</Segment>
+	<Mapping From="IncorrectParserTest2App.E_CYCLE" To="FORTE_PC.EMB_RES"/>
+	<Mapping From="IncorrectParserTest2App.OUT_ANY_CONSOLE" To="FORTE_PC.EMB_RES"/>
+	<Mapping From="IncorrectParserTest2App.STRING2STRING" To="FORTE_PC.EMB_RES"/>
+	<Link SegmentName="Ethernet" CommResource="FORTE_PC" Comment="">
+	</Link>
+</System>

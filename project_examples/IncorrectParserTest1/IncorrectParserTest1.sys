@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<System Name="IncorrectParserTest1">
+	<VersionInfo Version="1.0" Author="dakudryashev" Date="2025-07-22">
+	</VersionInfo>
+	<Application Name="IncorrectParserTest1App">
+		<SubAppNetwork>
+			<FB Name="E_CYCLE" Type="E_CYCLE" x="2500" y="100">
+				<Parameter Name="DT" Value="T#5s"/>
+			</FB>
+			<FB Name="INT2INT" Type="INT2INT" x="3800" y="200">
+				<Parameter Name="IN" Value="10"/>
+			</FB>
+			<EventConnections>
+				<Connection Source="E_CYCLE.EO" Destination="INT2INT.REQ" dx1="358.82"/>
+			</EventConnections>
+		</SubAppNetwork>
+	</Application>
+	<Device Name="FORTE_PC" Type="FORTE_PC" x="3541.18" y="770.59">
+		<Parameter Name="MGR_ID" Value="&quot;localhost:61499&quot;" Comment="Device manager socket ID"/>
+		<Attribute Name="Profile" Type="STRING" Value="HOLOBLOC"/>
+		<Attribute Name="Color" Type="STRING" Value="255,190,111"/>
+		<Resource Name="EMB_RES" Type="EMB_RES" x="0" y="0">
+			<FBNetwork>
+				<EventConnections>
+					<Connection Source="START.COLD" Destination="IncorrectParserTest1App.E_CYCLE.START" dx1="864.71"/>
+				</EventConnections>
+			</FBNetwork>
+		</Resource>
+	</Device>
+	<Segment Name="Ethernet" Type="Ethernet" x="3858.82" y="2047.06" dx1="1764.71">
+		<Attribute Name="Color" Type="STRING" Value="211,44,89"/>
+	</Segment>
+	<Mapping From="IncorrectParserTest1App.E_CYCLE" To="FORTE_PC.EMB_RES"/>
+	<Mapping From="IncorrectParserTest1App.INT2INT" To="FORTE_PC.EMB_RES"/>
+	<Link SegmentName="Ethernet" CommResource="FORTE_PC" Comment="">
+	</Link>
+</System>
