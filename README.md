@@ -30,3 +30,9 @@ If you forget how to use this application you can always type:
 ```commandline
 python main.py -h
 ```
+You can type -v/--verbose to start application in detailed description mode.  
+Example:
+```commandline
+python main.py -s D:\projects\rtsoft\project_examples\IncorrectParserTest2\IncorrectParserTest2.sys -f D:\projects\rtsoft\project_examples\IncorrectParserTest2\IncorrectParserTest2_FORTE_PC.fboot -v
+```
+Try projects in project_example directory to see how does it work.
