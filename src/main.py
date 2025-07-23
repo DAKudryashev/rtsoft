@@ -10,6 +10,8 @@ def create_cmd_parser():
                    help='input path to .sys file (required)', metavar='sys_path')
     p.add_argument('-f', '--fboot', required=True,
                    help='input path to .fboot file (required)', metavar='fboot_path')
+    p.add_argument('-v', '--verbose', default=False, action='store_true',
+                   help='output the contents in the terminal')
     return p
 
 
@@ -18,17 +20,23 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     sys_file_parser = SysFileParser(args.sys)
-    print('.sys parsing started...\n')
     sys_file_parser.parse_sys_file()
-    sys_file_parser.print_results()
 
-    print('\n\n\n=====================\n\n\n')
+    if args.verbose:
+        print(args, '\n\n')
+        print('.sys parsing results...\n')
+        sys_file_parser.print_results()
+
+        print('\n\n\n=====================\n\n\n')
 
     fboot_file_verifier = FbootFileVerifier(args.fboot)
     fboot_file_verifier.set_data(sys_file_parser.get_data())
-    print('.fboot verifying started...\n')
     fboot_file_verifier.parse_fboot_file()
 
-    print('\n\n\n=====================\n\n\n')
+    if args.verbose:
+        print('.fboot verifying results...\n')
+        fboot_file_verifier.print_process()
+
+        print('\n\n\n=====================\n\n\n')
 
     fboot_file_verifier.print_results()

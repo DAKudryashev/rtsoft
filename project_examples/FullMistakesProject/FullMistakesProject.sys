@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<System Name="FullMistakesProject">
+	<VersionInfo Version="1.0" Author="ant1ler" Date="2025-07-22">
+	</VersionInfo>
+	<Application Name="FullMistakesProjectApp">
+		<SubAppNetwork>
+			<FB Name="STRING2STRING" Type="STRING2STRING" x="4100" y="1600">
+				<Parameter Name="IN" Value="'out1put'"/>
+			</FB>
+			<FB Name="E_CYCLE" Type="E_CYCLE" x="2500" y="1600">
+			</FB>
+			<EventConnections>
+				<Connection Source="STRING2STRING.CNF" Destination="OUT_ANY_CONSOLE.RE1" dx1="270.59"/>
+				<Connection Source="E_CYCLE.EO" Destination="STRING2STRING.REQ"/>
+			</EventConnections>
+			<DataConnections>
+			</DataConnections>
+		</SubAppNetwork>
+	</Application>
+	<Device Name="FORTE_PC" Type="FORTE_PC" x="7882.35" y="2811.76">
+		<Parameter Name="MGR_ID" Value="&quot;localhost:61499&quot;" Comment="Device manager socket ID"/>
+		<Attribute Name="Profile" Type="STRING" Value="HOLOBLOC"/>
+		<Attribute Name="Color" Type="STRING" Value="255,190,111"/>
+		<Resource Name="EMB_RES" Type="EMB_RES" x="0" y="0">
+			<FBNetwork>
+				<EventConnections>
+					<Connection Source="START.COLD" Destination="FullMistakesProjectApp.E_CYCLE.START" dx1="864.71"/>
+					<Connection Source="START.WARM" Destination="FullMistakesProjectApp.E_CYCLE.START" dx1="864.71"/>
+				</EventConnections>
+			</FBNetwork>
+		</Resource>
+	</Device>
+	<Segment Name="Ethernet" Type="Ethernet" x="7552.94" y="4376.47" dx1="1764.71">
+		<Attribute Name="Color" Type="STRING" Value="203,186,64"/>
+	</Segment>
+	<Mapping From="FullMistakesProjectApp.OUT_ANY_CONSOLE" To="FORTE_PC.EMB_RES"/>
+	<Mapping From="FullMistakesProjectApp.STRING2STRING" To="FORTE_PC.EMB_RES"/>
+	<Mapping From="FullMistakesProjectApp.E_CYCLE" To="FORTE_PC.EMB_RES"/>
+	<Link SegmentName="Ethernet" CommResource="FORTE_PC" Comment="">
+	</Link>
+</System>

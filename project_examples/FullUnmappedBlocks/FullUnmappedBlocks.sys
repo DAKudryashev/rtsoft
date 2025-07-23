@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<System Name="FullUnmappedBlocks">
+	<VersionInfo Version="1.0" Author="ant1ler" Date="2025-07-22">
+	</VersionInfo>
+	<Application Name="FullUnmappedBlocksApp">
+		<SubAppNetwork>
+			<FB Name="BOOL2BOOL" Type="BOOL2BOOL" x="1900" y="-100">
+			</FB>
+			<FB Name="STRING2STRING" Type="STRING2STRING" x="3500" y="-100">
+				<Parameter Name="IN" Value="'123321'"/>
+			</FB>
+			<FB Name="OUT_ANY_CONSOLE" Type="OUT_ANY_CONSOLE" x="5400" y="-300">
+			</FB>
+			<FB Name="E_CYCLE" Type="E_CYCLE" x="800" y="-100">
+			</FB>
+			<EventConnections>
+				<Connection Source="BOOL2BOOL.CNF" Destination="STRING2STRING.REQ"/>
+				<Connection Source="STRING2STRING.CNF" Destination="OUT_ANY_CONSOLE.REQ" dx1="517.65"/>
+				<Connection Source="E_CYCLE.EO" Destination="BOOL2BOOL.REQ"/>
+			</EventConnections>
+			<DataConnections>
+				<Connection Source="STRING2STRING.OUT" Destination="OUT_ANY_CONSOLE.IN"/>
+			</DataConnections>
+		</SubAppNetwork>
+	</Application>
+	<Device Name="FORTE_PC" Type="FORTE_PC" x="3047.06" y="664.71">
+		<Parameter Name="MGR_ID" Value="&quot;localhost:61499&quot;" Comment="Device manager socket ID"/>
+		<Attribute Name="Profile" Type="STRING" Value="HOLOBLOC"/>
+		<Attribute Name="Color" Type="STRING" Value="255,190,111"/>
+		<Resource Name="EMB_RES" Type="EMB_RES" x="0" y="0">
+			<FBNetwork>
+			</FBNetwork>
+		</Resource>
+	</Device>
+	<Segment Name="Ethernet" Type="Ethernet" x="3229.41" y="1694.12" dx1="1764.71">
+		<Attribute Name="Color" Type="STRING" Value="47,172,198"/>
+	</Segment>
+	<Link SegmentName="Ethernet" CommResource="FORTE_PC" Comment="">
+	</Link>
+</System>

@@ -19,6 +19,8 @@ class FbootFileVerifier:
         self.current_parameter = None
         self.current_connection = None
 
+        self.process_output = []
+
     def update_file_path(self, path):
         self.file_path = path
 
@@ -76,12 +78,13 @@ class FbootFileVerifier:
                         if sys_resource == self.current_resource:
                             self.sys_resources.remove(sys_resource)
                             self.unstarted_resources.append(sys_resource)
-                            print(f'found: {sys_resource.full_name}, resources left to check: {len(self.sys_resources)}')
+                            self.process_output.append(f'found: {sys_resource.full_name}, '
+                                                       f'resources left to check: {len(self.sys_resources)}')
                             successfully = True
                             break
 
                     if not successfully:
-                        print('Incorrect resource creation writing in line:', cnt)
+                        self.process_output.append(f'Incorrect resource creation writing in line: {cnt}')
                         self.incorrect_lines.append(line.strip())
 
                 # Collecting fbs
@@ -100,11 +103,11 @@ class FbootFileVerifier:
                     for sys_fb in self.sys_fbs:
                         if sys_fb == self.current_fb:
                             self.sys_fbs.remove(sys_fb)
-                            print(f'found: {sys_fb.name}, fbs left to check: {len(self.sys_fbs)}')
+                            self.process_output.append(f'found: {sys_fb.name}, fbs left to check: {len(self.sys_fbs)}')
                             successfully = True
                             break
                     if not successfully:
-                        print('incorrect fb creation writing in line:', cnt)
+                        self.process_output.append(f'incorrect fb creation writing in line: {cnt}')
                         self.incorrect_lines.append(line.strip())
 
                 # Collecting fb parameters
@@ -127,11 +130,12 @@ class FbootFileVerifier:
                                 self.recount_int_parameter()
                             if sys_param.value == self.current_parameter.value:
                                 self.sys_parameters.remove(sys_param)
-                                print(f'found: {sys_param.value}, parameters left to check: {len(self.sys_parameters)}')
+                                self.process_output.append(f'found: {sys_param.value},'
+                                                           f' parameters left to check: {len(self.sys_parameters)}')
                                 successfully = True
                                 break
                     if not successfully:
-                        print('incorrect writing fb parameter in line:', cnt)
+                        self.process_output.append(f'incorrect writing fb parameter in line: {cnt}')
                         self.incorrect_lines.append(line.strip())
 
                 # Collecting connections
@@ -150,11 +154,12 @@ class FbootFileVerifier:
                     for sys_conn in self.sys_connections:
                         if sys_conn == self.current_connection:
                             self.sys_connections.remove(sys_conn)
-                            print(f'found: {sys_conn.source}, connections left to check: {len(self.sys_connections)}')
+                            self.process_output.append(f'found: {sys_conn.source},'
+                                                       f' connections left to check: {len(self.sys_connections)}')
                             successfully = True
                             break
                     if not successfully:
-                        print('incorrect writing connection between fbs in line:', cnt)
+                        self.process_output.append(f'incorrect writing connection between fbs in line: {cnt}')
                         self.incorrect_lines.append(line.strip())
 
                 elif command.find('Action="START"'):
@@ -181,6 +186,8 @@ class FbootFileVerifier:
                         except ValueError:
                             pass
 
+    def print_process(self):
+        print('\n'.join(i for i in self.process_output))
 
     def print_results(self):
         correct = True
