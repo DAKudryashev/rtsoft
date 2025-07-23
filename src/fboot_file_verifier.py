@@ -191,32 +191,44 @@ class FbootFileVerifier:
 
     def print_results(self):
         correct = True
-        for key, value in {'resources' : self.sys_resources,
-                           'FBs' : self.sys_fbs,
-                           'parameters' : self.sys_parameters,
-                           'connections' : self.sys_connections}.items():
-            if value:
-                correct = False
-                print(f'Unresolved {key} from sys:')
-                for i in value:
-                    if key == 'resources':
-                        print(f'<Resource Name="{i.short_name}" Type="{i.res_type}"...>')
-                    elif key == 'FBs':
-                        print(f'<FB Name="{i.name.split('.', 1)[-1]}" Type="{i.fb_type}"...>')
-                    elif key == 'parameters':
-                        print(f'<Parameter Name="{i.destination.split('.')[-1]}" Value="{i.value}"...>')
-                    else:
-                        print(f'<Connection Source="{i.source if 'START.' in i.source else i.source.split('.', 1)[-1]}"'
-                              f' Destination="{i.destination.split('.', 1)[-1]}"...>')
-                print()
 
+        # Output mistakes from .sys file
+        if self.sys_resources:
+            correct = False
+            print('Unresolved resources from sys:\n',
+                  '\n'.join(f'<Resource Name="{i.short_name}" Type="{i.res_type}"...>' for i in self.sys_resources),
+                  sep='', end='\n\n')
+
+        if self.sys_fbs:
+            correct = False
+            print('Unresolved FBs from sys:\n',
+                  '\n'.join(f'<FB Name="{i.name.split('.', 1)[-1]}" Type="{i.fb_type}"...>' for i in self.sys_fbs),
+                  sep='', end='\n\n')
+
+        if self.sys_parameters:
+            correct = False
+            print('Unresolved parameters from sys:\n',
+                  '\n'.join(f'<Parameter Name="{i.destination.split('.')[-1]}" Value="{i.value}"...>'
+                            for i in self.sys_parameters), sep='',
+                  end='\n\n')
+
+        if self.sys_connections:
+            correct = False
+            print('Unresolved connections from sys:\n',
+                  '\n'.join(f'<Connection Source="{i.source if 'START.' in i.source else i.source.split('.', 1)[-1]}"'
+                            f' Destination="{i.destination.split('.', 1)[-1]}"...>' for i in self.sys_connections),
+                  sep='', end='\n\n')
+
+        # Output mistakes from .fboot file
         if self.incorrect_lines:
             correct = False
-            print('Unexpected elements from fboot in lines:\n', ',\n'.join(f'{i}' for i in self.incorrect_lines), sep='')
+            print('Unexpected elements from fboot in lines:\n',
+                  '\n'.join(f'{i}' for i in self.incorrect_lines), sep='')
 
         if self.unstarted_resources:
             correct = False
             print('unstarted resources:', ','.join(f'{i}' for i in self.unstarted_resources))
 
+        # Output if there are no mistakes
         if correct:
             print('File .fboot fully complies with file .sys')
